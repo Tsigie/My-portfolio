@@ -1,0 +1,10 @@
+finish html and organize how i want everything to be.
+1. about me.
+2. layout of my page.
+3. create clickable buttons.
+4. What is in fashion now.
+5. styling the web page.
+6. functionality of the page.
+7. mobile responsive page.
+8. bootstrap.
+9. 
