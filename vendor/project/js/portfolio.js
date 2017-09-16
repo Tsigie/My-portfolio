@@ -312,9 +312,9 @@ if (typeof jQuery === 'undefined') {
   // CAROUSEL CLASS DEFINITION
   // =========================
 
-  var Hangman-game = function (element, options) {
+  var Carousel = function (element, options) {
     this.$element    = $(element)
-    this.$indicators = this.$element.find('.hangman-game-indicators')
+    this.$indicators = this.$element.find('.carousel-indicators')
     this.options     = options
     this.paused      = null
     this.sliding     = null
@@ -322,25 +322,25 @@ if (typeof jQuery === 'undefined') {
     this.$active     = null
     this.$items      = null
 
-    this.options.keyboard && this.$element.on('keydown.bs.hangman-game', $.proxy(this.keydown, this))
+    this.options.keyboard && this.$element.on('keydown.bs.carousel', $.proxy(this.keydown, this))
 
     this.options.pause == 'hover' && !('ontouchstart' in document.documentElement) && this.$element
-      .on('mouseenter.bs.hangman-game', $.proxy(this.pause, this))
-      .on('mouseleave.bs.hangman-game', $.proxy(this.cycle, this))
+      .on('mouseenter.bs.carousel', $.proxy(this.pause, this))
+      .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
   }
 
-  Hangman-game.VERSION  = '3.3.7'
+  Carousel.VERSION  = '3.3.7'
 
-  Hangman-game.TRANSITION_DURATION = 600
+  Carousel.TRANSITION_DURATION = 600
 
-  Hangman-game.DEFAULTS = {
+  Carousel.DEFAULTS = {
     interval: 5000,
     pause: 'hover',
     wrap: true,
     keyboard: true
   }
 
-  Hangman-game.prototype.keydown = function (e) {
+  Carousel.prototype.keydown = function (e) {
     if (/input|textarea/i.test(e.target.tagName)) return
     switch (e.which) {
       case 37: this.prev(); break
@@ -351,7 +351,7 @@ if (typeof jQuery === 'undefined') {
     e.preventDefault()
   }
 
-  Hangman-game.prototype.cycle = function (e) {
+  Carousel.prototype.cycle = function (e) {
     e || (this.paused = false)
 
     this.interval && clearInterval(this.interval)
@@ -363,12 +363,12 @@ if (typeof jQuery === 'undefined') {
     return this
   }
 
-  Hangman-game.prototype.getItemIndex = function (item) {
+  Carousel.prototype.getItemIndex = function (item) {
     this.$items = item.parent().children('.item')
     return this.$items.index(item || this.$active)
   }
 
-  Hangman-game.prototype.getItemForDirection = function (direction, active) {
+  Carousel.prototype.getItemForDirection = function (direction, active) {
     var activeIndex = this.getItemIndex(active)
     var willWrap = (direction == 'prev' && activeIndex === 0)
                 || (direction == 'next' && activeIndex == (this.$items.length - 1))
@@ -378,7 +378,7 @@ if (typeof jQuery === 'undefined') {
     return this.$items.eq(itemIndex)
   }
 
-  Hangman-game.prototype.to = function (pos) {
+  Carousel.prototype.to = function (pos) {
     var that        = this
     var activeIndex = this.getItemIndex(this.$active = this.$element.find('.item.active'))
 
@@ -390,7 +390,7 @@ if (typeof jQuery === 'undefined') {
     return this.slide(pos > activeIndex ? 'next' : 'prev', this.$items.eq(pos))
   }
 
-  Hangman-game.prototype.pause = function (e) {
+  Carousel.prototype.pause = function (e) {
     e || (this.paused = true)
 
     if (this.$element.find('.next, .prev').length && $.support.transition) {
@@ -403,17 +403,17 @@ if (typeof jQuery === 'undefined') {
     return this
   }
 
-  Hangman-game.prototype.next = function () {
+  Carousel.prototype.next = function () {
     if (this.sliding) return
     return this.slide('next')
   }
 
-  Hangman-game.prototype.prev = function () {
+  Carousel.prototype.prev = function () {
     if (this.sliding) return
     return this.slide('prev')
   }
 
-  Hangman-game.prototype.slide = function (type, next) {
+  Carousel.prototype.slide = function (type, next) {
     var $active   = this.$element.find('.item.active')
     var $next     = next || this.getItemForDirection(type, $active)
     var isCycling = this.interval
@@ -423,7 +423,7 @@ if (typeof jQuery === 'undefined') {
     if ($next.hasClass('active')) return (this.sliding = false)
 
     var relatedTarget = $next[0]
-    var slideEvent = $.Event('slide.bs.hangman-game', {
+    var slideEvent = $.Event('slide.bs.carousel', {
       relatedTarget: relatedTarget,
       direction: direction
     })
@@ -440,7 +440,7 @@ if (typeof jQuery === 'undefined') {
       $nextIndicator && $nextIndicator.addClass('active')
     }
 
-    var slidEvent = $.Event('slid.bs.hangman-game', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
+    var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
     if ($.support.transition && this.$element.hasClass('slide')) {
       $next.addClass(type)
       $next[0].offsetWidth // force reflow
@@ -455,7 +455,7 @@ if (typeof jQuery === 'undefined') {
             that.$element.trigger(slidEvent)
           }, 0)
         })
-        .emulateTransitionEnd(Hangman-game.TRANSITION_DURATION)
+        .emulateTransitionEnd(Carousel.TRANSITION_DURATION)
     } else {
       $active.removeClass('active')
       $next.addClass('active')
@@ -475,28 +475,28 @@ if (typeof jQuery === 'undefined') {
   function Plugin(option) {
     return this.each(function () {
       var $this   = $(this)
-      var data    = $this.data('bs.hangman-game')
-      var options = $.extend({}, Hangman-game.DEFAULTS, $this.data(), typeof option == 'object' && option)
+      var data    = $this.data('bs.carousel')
+      var options = $.extend({}, Carousel.DEFAULTS, $this.data(), typeof option == 'object' && option)
       var action  = typeof option == 'string' ? option : options.slide
 
-      if (!data) $this.data('bs.hangman-game', (data = new Hangman-game(this, options)))
+      if (!data) $this.data('bs.carousel', (data = new Carousel(this, options)))
       if (typeof option == 'number') data.to(option)
       else if (action) data[action]()
       else if (options.interval) data.pause().cycle()
     })
   }
 
-  var old = $.fn.hangman-game
+  var old = $.fn.carousel
 
-  $.fn.hangman-game             = Plugin
-  $.fn.hangman-game.Constructor = Hangman-game
+  $.fn.carousel             = Plugin
+  $.fn.carousel.Constructor = Carousel
 
 
   // CAROUSEL NO CONFLICT
   // ====================
 
-  $.fn.hangman-game.noConflict = function () {
-    $.fn.hangman-game = old
+  $.fn.carousel.noConflict = function () {
+    $.fn.carousel = old
     return this
   }
 
@@ -508,7 +508,7 @@ if (typeof jQuery === 'undefined') {
     var href
     var $this   = $(this)
     var $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) // strip for ie7
-    if (!$target.hasClass('hangman-game')) return
+    if (!$target.hasClass('carousel')) return
     var options = $.extend({}, $target.data(), $this.data())
     var slideIndex = $this.attr('data-slide-to')
     if (slideIndex) options.interval = false
@@ -516,20 +516,20 @@ if (typeof jQuery === 'undefined') {
     Plugin.call($target, options)
 
     if (slideIndex) {
-      $target.data('bs.hangman-game').to(slideIndex)
+      $target.data('bs.carousel').to(slideIndex)
     }
 
     e.preventDefault()
   }
 
   $(document)
-    .on('click.bs.hangman-game.data-api', '[data-slide]', clickHandler)
-    .on('click.bs.hangman-game.data-api', '[data-slide-to]', clickHandler)
+    .on('click.bs.carousel.data-api', '[data-slide]', clickHandler)
+    .on('click.bs.carousel.data-api', '[data-slide-to]', clickHandler)
 
   $(window).on('load', function () {
-    $('[data-ride="hangman-game"]').each(function () {
-      var $hangman-game = $(this)
-      Plugin.call($hangman-game, $hangman-game.data())
+    $('[data-ride="carousel"]').each(function () {
+      var $carousel = $(this)
+      Plugin.call($carousel, $carousel.data())
     })
   })
 
